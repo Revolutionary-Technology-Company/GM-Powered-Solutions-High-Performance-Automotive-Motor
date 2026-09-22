@@ -1,0 +1,47 @@
+version: '3.8'
+
+# ==============================================================================
+# REVOLUTIONARY TECHNOLOGY COMPANY - POWERTRAIN CLUSTER TOPOLOGY
+# Configuration Profile: Sandbox vs Hardened Multi-Party Production Matrix
+# ==============================================================================
+
+services:
+  # Profile 1: Sandbox Environment (Local Testing & Telemetry Mocking)
+  univac-sandbox:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: revolutionarytech/powertrain-bridge:sandbox
+    container_name: univac_sandbox_core
+    ports:
+      - "8501:8501" # Exposes local cockpit interface endpoint
+    environment:
+      - RUN_MODE=SANDBOX
+      - AUDIT_POLICY=LOG_ONLY
+      - GASKET_PRESSURE_OVERRIDE=45.0
+    volumes:
+      - .:/workspace
+    command: python3 src/core/gasket_telemetry.py
+
+  # Profile 2: Production Environment (Hardened Aerospace-Grade Car Cluster)
+  univac-production:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: revolutionarytech/powertrain-bridge:production
+    container_name: univac_production_core
+    ports:
+      - "443:443" # Binds communications to secure TLS channel gateways
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'       # Strict compute capping to prevent processor thermal saturation
+          memory: 4096M     # Allocates locked memory block matching ASUS TUF constraints
+    environment:
+      - RUN_MODE=PRODUCTION
+      - AUDIT_POLICY=HARD_LOCK
+      - TARGET_DOMAIN_ALPHA=interface.01_node_://lockheedmartin.com
+      - TARGET_DOMAIN_BETA=interface.01_node_://boeing.com
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
