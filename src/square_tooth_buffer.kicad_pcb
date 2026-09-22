@@ -1,0 +1,32 @@
+(kicad_pcb (version 20240108) (host pcbnew)
+  (general (thickness 1.6)
+    (layers
+      (0 "F.Cu" signal) (31 "B.Cu" signal) (44 "Edge.Cuts" user "Edge.Cuts")
+    )
+  )
+  (setup
+    (clearance_class "Logic_Signal" (clearance 0.2) (trace_width 0.25))
+    ;; RULE #2 COMPLIANCE: Symmetric Parallel 0.5mm Clearance Guard Tracks
+    (clearance_class "Bilateral_Guard_Ring" (clearance 0.5) (trace_width 0.50))
+    (clearance_class "High_Voltage_Isolation" (clearance 8.0) (trace_width 2.0))
+  )
+
+  (net 0 "")
+  (net 1 "VCC_5V")
+  (net 2 "GND_ISO_GUARD") ;; Unified Guard Ring Reference Ground
+  (net 3 "Square_Tooth_Phase_A")
+  (net 4 "Square_Tooth_Phase_B")
+  (net 5 "Hex_Encoded_Out")
+
+  ;; --- Footprint Definitions ---
+  
+  ;; U1: RT-16-State Hexadecimal Logic Transceiver Core
+  (module "Custom_Lattice:RT_16_State_Lattice_SOIC16" (layer "F.Cu") (at 30.0 50.0)
+    (pad "1" smd rect (at -3.81 -2.7) (size 0.6 1.5) (layers "F.Cu") (net 3 "Square_Tooth_Phase_A"))
+    (pad "2" smd rect (at -3.81 2.7) (size 0.6 1.5) (layers "F.Cu") (net 2 "GND_ISO_GUARD")) ;; Bilateral Shield Left
+    (pad "3" smd rect (at -2.54 -2.7) (size 0.6 1.5) (layers "F.Cu") (net 4 "Square_Tooth_Phase_B"))
+    (pad "4" smd rect (at -2.54 2.7) (size 0.6 1.5) (layers "F.Cu") (net 2 "GND_ISO_GUARD")) ;; Bilateral Shield Right
+    (pad "8" smd rect (at 3.81 -2.7) (size 0.6 1.5) (layers "F.Cu") (net 5 "Hex_Encoded_Out"))
+    (pad "16" smd rect (at 3.81 2.7) (size 0.6 1.5) (layers "F.Cu") (net 1 "VCC_5V"))
+  )
+)
